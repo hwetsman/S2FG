@@ -46,22 +46,22 @@ halving_dict = {1: (0, 210000, 50), 2: (210001, 420000, 25), 3: (420001, 630000,
 block_emission_df = pd.DataFrame.from_dict(halving_dict, orient='index', columns=[
     'starting_block', 'ending_block', 'btc_per_block'])
 st.set_page_config(layout="wide")
-#
-# block_df = pd.read_csv(block_file)
-# for i, r in block_df.iterrows():
-#     if i == 0:
-#         block_df.loc[i, 'month_flow'] = get_btc_emitted(block_df.loc[i, 'block'], 0)
-#     else:
-#         block_df.loc[i, 'month_flow'] = get_btc_emitted(
-#             block_df.loc[i, 'block'], block_df.loc[i-1, 'block'])
-# block_df.loc[0, 'stock'] = 0
-# for i, r in block_df.iterrows():
-#     if i == 0:
-#         pass
-#     else:
-#         block_df.loc[i, 'stock'] = block_df.loc[i-1, 'month_flow']+block_df.loc[i-1, 'stock']
-# block_df.date = pd.to_datetime(block_df.date)
-# # st.write(block_df)
+
+block_df = pd.read_csv(block_file)
+for i, r in block_df.iterrows():
+    if i == 0:
+        block_df.loc[i, 'month_flow'] = get_btc_emitted(block_df.loc[i, 'block'], 0)
+    else:
+        block_df.loc[i, 'month_flow'] = get_btc_emitted(
+            block_df.loc[i, 'block'], block_df.loc[i-1, 'block'])
+block_df.loc[0, 'stock'] = 0
+for i, r in block_df.iterrows():
+    if i == 0:
+        pass
+    else:
+        block_df.loc[i, 'stock'] = block_df.loc[i-1, 'month_flow']+block_df.loc[i-1, 'stock']
+block_df.date = pd.to_datetime(block_df.date)
+st.write(block_df)
 #
 # price_df = pd.read_csv(price_file)
 # price_df.date = pd.to_datetime(price_df.date)
