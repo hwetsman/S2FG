@@ -189,29 +189,28 @@ projected_df.reset_index(drop=False, inplace=True)
 
 projected_df = projected_df[projected_df.year.dt.year > int(year)-2]
 
-tops = st.sidebar.selectbox('Choose multiple to measure top', [.5, 1, 1.5, 2, 2.5], index=2)
+tops = st.sidebar.selectbox('Choose multiple to measure top', [1, 1.5, 2, 2.5, 3, 5], index=2)
 
-# st.write(block_price_df)
+
 block_price_df.price = block_price_df.price.astype(float)
-print(block_price_df.info())
-block_price_df['range'] = (1+tops)*block_price_df['s2fg_price']
-# st.write(projected_df)
-projected_range = st.sidebar.selectbox(
-    'Choose multiple to proect top', [.5, 1, 1.5, 2, 2.5], index=2)
-projected_df['range'] = (1+projected_range)*projected_df.S2F_Price
+block_price_df['range'] = (tops)*block_price_df['s2fg_price']
 
-# fig = make_subplots(rows=1,cols=1,specs=[[{'secondary_y': False}]],)
+
+projected_mult = st.sidebar.selectbox('Choose multiple to project top', [1, 1.5, 2, 2.5, 3, 3.5])
+projected_df['range'] = (projected_mult)*projected_df.S2F_Price
+
+
 fig = px.line(block_price_df, x='date', y='s2fg_price', width=800, height=700)
-# fig.add_trace(go.Scatter(x=block_price_df['date'], y=block_price_df['s2fg_price'],
-#               name='S2FG', mode='lines'), secondary_y=False)
 fig.add_trace(go.Scatter(x=block_price_df['date'],
               y=block_price_df.price, name='Price', mode='markers'))
 fig.add_trace(go.Scatter(x=projected_df.year, y=projected_df.S2F_Price,
                          name='Projected', mode='lines+markers'))
 fig.add_trace(go.Scatter(x=block_price_df.date, y=block_price_df.range,
               name="Above S2FG Price", mode='lines'))
+
 fig.add_trace(go.Scatter(x=projected_df.year, y=projected_df.range,
               name='Above S2FG Price', mode='lines'))
+
 fig.update_yaxes(title_text="y-axis in logarithmic scale", type="log")
 st.plotly_chart(fig, use_container_width=True)
 # st.plotly_chart(fig)
