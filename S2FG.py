@@ -76,7 +76,7 @@ c = 2.8294*(10 ** (-21))
 m = 5.0046
 n = 2.0669
 block_price_df['s2fg_price'] = c*block_price_df['stock']**m/block_price_df['flow']**n
-st.write(block_price_df)
+# st.write(block_price_df)
 #
 today = datetime.datetime.today().date()
 year = str(today.year)
@@ -177,19 +177,19 @@ i = '2021'
 projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 57238.62
 i = '2022'
 projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 19780
-st.write(projected_df)
+# st.write(projected_df)
 #
 c = 2.8294*(10 ** (-21))
 m = 5.0046
 n = 2.0669
 projected_df['S2F'] = projected_df['end']/projected_df['added']
 projected_df['S2F_Price'] = c*projected_df['end']**m/projected_df['added']**n
-st.write(projected_df)
+# st.write(projected_df)
 
 # df['sd'] = df.S2F_Price.std()
 projected_df.reset_index(drop=False, inplace=True)
 projected_df = projected_df[projected_df.year.dt.date > today]
-st.write(projected_df)
+# st.write(projected_df)
 
 
 fig = make_subplots(specs=[[{'secondary_y': False}]])
