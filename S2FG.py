@@ -78,10 +78,10 @@ n = 2.0669
 block_price_df['s2fg_price'] = c*block_price_df['stock']**m/block_price_df['flow']**n
 st.write(block_price_df)
 #
-# today = datetime.datetime.today().date()
-# year = str(today.year)
-# month = str(today.month)
-# eom = pd.to_datetime(year+month, format="%Y%m") + MonthEnd(1)
+today = datetime.datetime.today().date()
+year = str(today.year)
+month = str(today.month)
+eom = pd.to_datetime(year+month, format="%Y%m") + MonthEnd(1)
 # #
 # #
 # # get new price
