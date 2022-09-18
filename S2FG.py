@@ -190,7 +190,7 @@ projected_df['S2F_Price'] = c*projected_df['end']**m/projected_df['added']**n
 projected_df.reset_index(drop=False, inplace=True)
 projected_df = projected_df[projected_df.year.dt.year > int(year)-2]
 # st.write(projected_df)
-
+something = st.sidebar.selectbox('for future use', ['a', 'b'], index=0)
 
 # fig = make_subplots(rows=1,cols=1,specs=[[{'secondary_y': False}]],)
 fig = px.line(block_price_df, x='date', y='s2fg_price', width=800, height=700)
