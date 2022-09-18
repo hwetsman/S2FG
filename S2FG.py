@@ -61,13 +61,13 @@ for i, r in block_df.iterrows():
     else:
         block_df.loc[i, 'stock'] = block_df.loc[i-1, 'month_flow']+block_df.loc[i-1, 'stock']
 block_df.date = pd.to_datetime(block_df.date)
-st.write(block_df)
+# st.write(block_df)
 #
-# price_df = pd.read_csv(price_file)
-# price_df.date = pd.to_datetime(price_df.date)
-# price_df.sort_values('date', inplace=True)
-# price_df.reset_index(inplace=True, drop=True)
-# # st.write(price_df)
+price_df = pd.read_csv(price_file)
+price_df.date = pd.to_datetime(price_df.date)
+price_df.sort_values('date', inplace=True)
+price_df.reset_index(inplace=True, drop=True)
+st.write(price_df)
 #
 # block_price_df = pd.merge(price_df, block_df, on='date', how='left')
 # block_price_df['flow'] = 12*block_price_df['month_flow']
