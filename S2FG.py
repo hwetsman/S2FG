@@ -188,7 +188,7 @@ projected_df['S2F_Price'] = c*projected_df['end']**m/projected_df['added']**n
 
 # df['sd'] = df.S2F_Price.std()
 projected_df.reset_index(drop=False, inplace=True)
-projected_df = projected_df[projected_df.year.dt.date > today]
+projected_df = projected_df[projected_df.year.dt.year > int(year)-2]
 # st.write(projected_df)
 
 
