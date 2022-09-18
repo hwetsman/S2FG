@@ -192,9 +192,10 @@ projected_df = projected_df[projected_df.year.dt.year > int(year)-2]
 # st.write(projected_df)
 
 
-fig = make_subplots(specs=[[{'secondary_y': False}]])
-fig.add_trace(go.Scatter(x=block_price_df['date'], y=block_price_df['s2fg_price'],
-              name='S2FG', mode='lines'), secondary_y=False)
+# fig = make_subplots(rows=1,cols=1,specs=[[{'secondary_y': False}]],)
+fig = px.line(block_price_df, x='date', y='s2fg_price', width=800, height=700)
+# fig.add_trace(go.Scatter(x=block_price_df['date'], y=block_price_df['s2fg_price'],
+#               name='S2FG', mode='lines'), secondary_y=False)
 fig.add_trace(go.Scatter(x=block_price_df['date'],
               y=block_price_df.price, name='Price', mode='markers'))
 fig.add_trace(go.Scatter(x=projected_df.year, y=projected_df.S2F_Price,
