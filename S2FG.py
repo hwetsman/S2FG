@@ -38,13 +38,13 @@ def get_btc_emitted(block, block_last_month):
     return btc_emitted
 
 
-# file = 'btc_emission.csv'
-# price_file = 'monthly_btc_price.csv'
-# block_file = 'blocks_by_month.csv'
-# halving_dict = {1: (0, 210000, 50), 2: (210001, 420000, 25), 3: (420001, 630000, 12.5), 4: (
-#     630001, 840000, 6.25), 5: (840001, 1050000, 3.125), 6: (1050001, 1260000, 1.5625), 7: (1260001, 1470000, .78125)}
-# block_emission_df = pd.DataFrame.from_dict(halving_dict, orient='index', columns=[
-#     'starting_block', 'ending_block', 'btc_per_block'])
+file = 'btc_emission.csv'
+price_file = 'monthly_btc_price.csv'
+block_file = 'blocks_by_month.csv'
+halving_dict = {1: (0, 210000, 50), 2: (210001, 420000, 25), 3: (420001, 630000, 12.5), 4: (
+    630001, 840000, 6.25), 5: (840001, 1050000, 3.125), 6: (1050001, 1260000, 1.5625), 7: (1260001, 1470000, .78125)}
+block_emission_df = pd.DataFrame.from_dict(halving_dict, orient='index', columns=[
+    'starting_block', 'ending_block', 'btc_per_block'])
 # st.set_page_config(layout="wide")
 #
 # block_df = pd.read_csv(block_file)
