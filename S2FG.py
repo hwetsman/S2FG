@@ -114,7 +114,7 @@ projected_df.loc[pd.to_datetime('12/31/2028'), 'block'] = 892500
 projected_df.loc[pd.to_datetime('12/31/2028'), 'epoch'] = 5
 projected_df.loc[pd.to_datetime('12/31/2028'), 'subsidy'] = 3.125
 projected_df.loc[pd.to_datetime('12/31/2028'),
-                 'starting'] = df.loc[pd.to_datetime('12/31/27'), 'end']
+                 'starting'] = projected_df.loc[pd.to_datetime('12/31/27'), 'end']
 projected_df.loc[pd.to_datetime('12/31/2028'), 'added'] = 164062.5
 projected_df.loc[pd.to_datetime('12/31/2028'), 'end'] = projected_df.loc[pd.to_datetime('12/31/28'),
                                                                          'starting'] + projected_df.loc[pd.to_datetime('12/31/2028'), 'added']
@@ -182,23 +182,23 @@ st.write(projected_df)
 c = 2.8294*(10 ** (-21))
 m = 5.0046
 n = 2.0669
-projected_df['S2F'] = projected_df['end']/df['added']
+projected_df['S2F'] = projected_df['end']/projected_df['added']
 projected_df['S2F_Price'] = c*projected_df['end']**m/projected_df['added']**n
 st.write(projected_df)
 
 # df['sd'] = df.S2F_Price.std()
-# df.reset_index(drop=False, inplace=True)
-# df = df[df.year.dt.date > today]
-# st.write(df)
+projected_df.reset_index(drop=False, inplace=True)
+projected_df = projected_df[projected_df.year.dt.date > today]
+st.write(projected_df)
 
 
-# fig = make_subplots(specs=[[{'secondary_y': False}]])
-# fig.add_trace(go.Scatter(x=block_price_df['date'], y=block_price_df['s2fg_price'],
-#               name='S2FG', mode='lines'), secondary_y=False)
-# fig.add_trace(go.Scatter(x=block_price_df['date'],
-#               y=block_price_df.price, name='Price', mode='markers'))
-# fig.add_trace(go.Scatter(x=df.year, y=df.S2F_Price,
-#                          name='Projected', mode='lines+markers'))
-# fig.update_yaxes(title_text="y-axis in logarithmic scale", type="log")
-# st.plotly_chart(fig, use_container_width=True)
-# # st.plotly_chart(fig)
+fig = make_subplots(specs=[[{'secondary_y': False}]])
+fig.add_trace(go.Scatter(x=block_price_df['date'], y=block_price_df['s2fg_price'],
+              name='S2FG', mode='lines'), secondary_y=False)
+fig.add_trace(go.Scatter(x=block_price_df['date'],
+              y=block_price_df.price, name='Price', mode='markers'))
+fig.add_trace(go.Scatter(x=projected_df.year, y=projected_df.S2F_Price,
+                         name='Projected', mode='lines+markers'))
+fig.update_yaxes(title_text="y-axis in logarithmic scale", type="log")
+st.plotly_chart(fig, use_container_width=True)
+# st.plotly_chart(fig)
