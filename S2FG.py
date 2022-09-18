@@ -67,16 +67,16 @@ price_df = pd.read_csv(price_file)
 price_df.date = pd.to_datetime(price_df.date)
 price_df.sort_values('date', inplace=True)
 price_df.reset_index(inplace=True, drop=True)
-st.write(price_df)
+# st.write(price_df)
 #
-# block_price_df = pd.merge(price_df, block_df, on='date', how='left')
-# block_price_df['flow'] = 12*block_price_df['month_flow']
-# block_price_df['s2f'] = block_price_df['stock']/block_price_df['flow']
-# c = 2.8294*(10 ** (-21))
-# m = 5.0046
-# n = 2.0669
-# block_price_df['s2fg_price'] = c*block_price_df['stock']**m/block_price_df['flow']**n
-# st.write(block_price_df)
+block_price_df = pd.merge(price_df, block_df, on='date', how='left')
+block_price_df['flow'] = 12*block_price_df['month_flow']
+block_price_df['s2f'] = block_price_df['stock']/block_price_df['flow']
+c = 2.8294*(10 ** (-21))
+m = 5.0046
+n = 2.0669
+block_price_df['s2fg_price'] = c*block_price_df['stock']**m/block_price_df['flow']**n
+st.write(block_price_df)
 #
 # today = datetime.datetime.today().date()
 # year = str(today.year)
