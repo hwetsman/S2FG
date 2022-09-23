@@ -16,6 +16,14 @@ def get_btc_price():
     return btc_price
 
 
+def get_btc_height():
+    url = 'https://api.blockcypher.com/v1/btc/main'
+    response = requests.get(url)
+    data = response.json()
+    height = data["height"]
+    return height
+
+
 def get_btc_emitted(block, block_last_month):
     if block_last_month == 0:
         epoch = 1
@@ -48,6 +56,7 @@ block_emission_df = pd.DataFrame.from_dict(halving_dict, orient='index', columns
 st.set_page_config(layout="wide")
 
 block_df = pd.read_csv(block_file)
+st.write(block_df)
 for i, r in block_df.iterrows():
     if i == 0:
         block_df.loc[i, 'month_flow'] = get_btc_emitted(block_df.loc[i, 'block'], 0)
@@ -102,6 +111,25 @@ if eom.date() == today:
 else:
     pass
 # #
+
+# get block height
+if eom.date() == today:
+    if datetime.datetime.now().hour == 23:
+        if datetime.datetime.now().minute == 59:
+            if today not in block_df.date.tolist():
+                last_index = block_df.index.tolist()[-1]
+                block_df.loc[last_index+1, 'block'] = get_btc_height()
+                block_df.loc[last_index+1, 'date'] = today
+                block_df.to_csv(block_file, index=False)
+            else:
+                pass
+        else:
+            pass
+    else:
+        pass
+else:
+    pass
+
 # #
 projected_df = pd.read_csv(file)
 projected_df.columns = ['date', 'block', 'epoch', 'subsidy', 'year',
