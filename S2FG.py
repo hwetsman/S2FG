@@ -250,5 +250,6 @@ fig.add_trace(go.Scatter(x=projected_df.year, y=projected_df.bottoms,
                          name='Below S2FG Price', mode='lines'))
 
 fig.update_yaxes(title_text="Value in US$", type="log")
+fig.update_xaxes(title_text='Date')
 st.plotly_chart(fig, use_container_width=True)
 # st.plotly_chart(fig)
