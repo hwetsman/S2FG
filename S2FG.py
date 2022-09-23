@@ -234,7 +234,8 @@ projected_df['range'] = (projected_mult)*projected_df.S2F_Price
 projected_df['bottoms'] = projected_lows*projected_df.S2F_Price
 
 
-fig = px.line(block_price_df, x='date', y='s2fg_price', width=800, height=700)
+fig = px.line(block_price_df, x='date', y='s2fg_price', width=800, height=700,
+              title='Price = C * Stock^m/Flow^n   c= 2.8294*(10^(-21)); m = 5.0046; n = 2.0669')
 fig.add_trace(go.Scatter(x=block_price_df['date'],
               y=block_price_df.price, name='Price', mode='markers'))
 fig.add_trace(go.Scatter(x=projected_df.year, y=projected_df.S2F_Price,
