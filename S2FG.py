@@ -84,23 +84,23 @@ month = str(today.month)
 eom = pd.to_datetime(year+month, format="%Y%m") + MonthEnd(1)
 # #
 # #
-# # get new price
-# if eom.date() == today:
-#     if datetime.datetime.now().hour == 23:
-#         if datetime.datetime.now().minute == 59:
-#             if today not in price_df.date.tolist():
-#                 last_index = price_df.index.tolist()[-1]
-#                 price_df.loc[last_index+1, 'price'] = get_btc_price()
-#                 price_df.loc[last_index+1, 'date'] = today
-#                 price_df.to_csv(price_file, index=False)
-#             else:
-#                 pass
-#         else:
-#             pass
-#     else:
-#         pass
-# else:
-#     pass
+# get new price
+if eom.date() == today:
+    if datetime.datetime.now().hour == 23:
+        if datetime.datetime.now().minute == 59:
+            if today not in price_df.date.tolist():
+                last_index = price_df.index.tolist()[-1]
+                price_df.loc[last_index+1, 'price'] = get_btc_price()
+                price_df.loc[last_index+1, 'date'] = today
+                price_df.to_csv(price_file, index=False)
+            else:
+                pass
+        else:
+            pass
+    else:
+        pass
+else:
+    pass
 # #
 # #
 projected_df = pd.read_csv(file)
