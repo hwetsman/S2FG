@@ -56,7 +56,7 @@ block_emission_df = pd.DataFrame.from_dict(halving_dict, orient='index', columns
 st.set_page_config(layout="wide")
 
 block_df = pd.read_csv(block_file)
-st.write(block_df)
+# st.write(block_df)
 for i, r in block_df.iterrows():
     if i == 0:
         block_df.loc[i, 'month_flow'] = get_btc_emitted(block_df.loc[i, 'block'], 0)
@@ -226,7 +226,8 @@ block_price_df['range'] = (tops)*block_price_df['s2fg_price']
 block_price_df['bottom_range'] = bottoms*block_price_df['s2fg_price']
 
 
-projected_mult = st.sidebar.selectbox('Choose multiple to project top', [1, 1.5, 2, 2.5, 3, 3.5])
+projected_mult = st.sidebar.selectbox('Choose multiple to project top', [
+                                      1, 1.5, 2, 2.5, 3, 3.5], index=2)
 projected_lows = st.sidebar.selectbox(
     'Choose a fraction to project bottoms', [.9, .8, .7, .6, .5, .4, .3], index=4)
 projected_df['range'] = (projected_mult)*projected_df.S2F_Price
