@@ -55,14 +55,16 @@ halving_dict = {1: (0, 210000, 50), 2: (210001, 420000, 25), 3: (420001, 630000,
 block_emission_df = pd.DataFrame.from_dict(halving_dict, orient='index', columns=[
     'starting_block', 'ending_block', 'btc_per_block'])
 st.set_page_config(layout="wide")
-
+dis_mode = st.sidebar.selectbox('Choose Stock Mode', ['Nominal', 'Adjusted for Lost Coins'])
 adj_df = pd.read_csv(adj_file)
 adj_df['date'] = adj_df['timestamp'].str[0:10]
 adj_df['eom'] = pd.to_datetime(adj_df['date'], format="%Y-%m-%d")+MonthEnd(0)
 adj_df['timestamp'] = adj_df['timestamp'].str[0:-2]
 adj_df = adj_df[adj_df['timestamp'] == adj_df['eom']]
-adj_df = adj_df.rename(columns={'value': 'stock'})
+adj_df = adj_df.rename(columns={'value': 'adj_stock'})
 adj_df = adj_df.drop(['date', 'eom'], axis=1)
+adj_df = adj_df.rename(columns={'timestamp': 'date'})
+adj_df.date = pd.to_datetime(adj_df.date)
 st.write(adj_df)
 
 block_df = pd.read_csv(block_file)
@@ -91,10 +93,16 @@ price_df.reset_index(inplace=True, drop=True)
 block_price_df = pd.merge(price_df, block_df, on='date', how='left')
 block_price_df['flow'] = 12*block_price_df['month_flow']
 block_price_df['s2f'] = block_price_df['stock']/block_price_df['flow']
+st.write(block_price_df)
+
+switch_df = pd.merge(adj_df, block_price_df, on='date', how='right')
+block_price_df = switch_df.copy()
+st.write(switch_df)
 c = 2.8294*(10 ** (-21))
 m = 5.0046
 n = 2.0669
 block_price_df['s2fg_price'] = c*block_price_df['stock']**m/block_price_df['flow']**n
+block_price_df['adj_s2fg_price'] = c*block_price_df['adj_stock']**m/block_price_df['flow']**n
 # st.write(block_price_df)
 #
 today = datetime.datetime.today().date()
