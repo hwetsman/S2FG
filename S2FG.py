@@ -240,6 +240,7 @@ bottoms = st.sidebar.selectbox('Choose a fraction to measure bottom',
                                [.9, .8, .7, .6, .5, .4, .3], index=4)
 
 block_price_df.price = block_price_df.price.astype(float)
+
 block_price_df['range'] = (tops)*block_price_df['s2fg_price']
 block_price_df['bottom_range'] = bottoms*block_price_df['s2fg_price']
 
@@ -251,9 +252,13 @@ projected_lows = st.sidebar.selectbox(
 projected_df['range'] = (projected_mult)*projected_df.S2F_Price
 projected_df['bottoms'] = projected_lows*projected_df.S2F_Price
 
+if dis_mode == 'Nominal':
+    fig = px.line(block_price_df, x='date', y='s2fg_price', width=800, height=700,
+                  title='Price = C * Stock^m/Flow^n   c= 2.8294*(10^(-21)); m = 5.0046; n = 2.0669')
+else:
+    fig = px.line(block_price_df, x='date', y='adj_s2fg_price', width=800, height=700,
+                  title='Price = C * Stock^m/Flow^n   c= 2.8294*(10^(-21)); m = 5.0046; n = 2.0669')
 
-fig = px.line(block_price_df, x='date', y='s2fg_price', width=800, height=700,
-              title='Price = C * Stock^m/Flow^n   c= 2.8294*(10^(-21)); m = 5.0046; n = 2.0669')
 fig.add_trace(go.Scatter(x=block_price_df['date'],
               y=block_price_df.price, name='Price', mode='markers'))
 fig.add_trace(go.Scatter(x=projected_df.year, y=projected_df.S2F_Price,
