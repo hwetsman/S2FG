@@ -49,11 +49,21 @@ def get_btc_emitted(block, block_last_month):
 file = 'btc_emission.csv'
 price_file = 'monthly_btc_price.csv'
 block_file = 'blocks_by_month.csv'
+adj_file = 'btc_adj_circ_supply.csv'
 halving_dict = {1: (0, 210000, 50), 2: (210001, 420000, 25), 3: (420001, 630000, 12.5), 4: (
     630001, 840000, 6.25), 5: (840001, 1050000, 3.125), 6: (1050001, 1260000, 1.5625), 7: (1260001, 1470000, .78125)}
 block_emission_df = pd.DataFrame.from_dict(halving_dict, orient='index', columns=[
     'starting_block', 'ending_block', 'btc_per_block'])
 st.set_page_config(layout="wide")
+
+adj_df = pd.read_csv(adj_file)
+adj_df['date'] = adj_df['timestamp'].str[0:10]
+adj_df['eom'] = pd.to_datetime(adj_df['date'], format="%Y-%m-%d")+MonthEnd(0)
+adj_df['timestamp'] = adj_df['timestamp'].str[0:-2]
+adj_df = adj_df[adj_df['timestamp'] == adj_df['eom']]
+adj_df = adj_df.rename(columns={'value': 'stock'})
+adj_df = adj_df.drop(['date', 'eom'], axis=1)
+st.write(adj_df)
 
 block_df = pd.read_csv(block_file)
 # st.write(block_df)
