@@ -46,6 +46,86 @@ def get_btc_emitted(block, block_last_month):
     return btc_emitted
 
 
+def create_projected(file):
+    projected_df = pd.read_csv(file)
+    projected_df.columns = ['date', 'block', 'epoch', 'subsidy', 'year',
+                            'starting', 'added', 'end', 'waste1', 'waste2']
+
+    projected_df['year'] = pd.to_datetime(projected_df['year'])
+    projected_df = projected_df.drop(['waste1', 'waste2', 'date'], axis=1)
+    projected_df.set_index('year', inplace=True, drop=True)
+    projected_df.loc[pd.to_datetime('12/31/2028'), 'block'] = 892500
+    projected_df.loc[pd.to_datetime('12/31/2028'), 'epoch'] = 5
+    projected_df.loc[pd.to_datetime('12/31/2028'), 'subsidy'] = 3.125
+    projected_df.loc[pd.to_datetime('12/31/2028'),
+                     'starting'] = projected_df.loc[pd.to_datetime('12/31/27'), 'end']
+    projected_df.loc[pd.to_datetime('12/31/2028'), 'added'] = 164062.5
+    projected_df.loc[pd.to_datetime('12/31/2028'), 'end'] = projected_df.loc[pd.to_datetime('12/31/28'),
+                                                                             'starting'] + projected_df.loc[pd.to_datetime('12/31/2028'), 'added']
+    for i in [2029, 2030, 2031, 2032]:
+        projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'epoch'] = 6
+        projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'subsidy'] = 3.125/2
+        projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'block'] = 52500 + \
+            projected_df.loc[pd.to_datetime(f'12/31/{i-1}'), 'block']
+        projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'added'] = 52500 * \
+            projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'subsidy']
+        projected_df.loc[pd.to_datetime(
+            f'12/31/{i}'), 'end'] = projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'added'] + projected_df.loc[pd.to_datetime(f'12/31/{i-1}'), 'end']
+        projected_df.loc[pd.to_datetime(
+            f'12/31/{i}'), 'starting'] = projected_df.loc[pd.to_datetime(f'12/31/{i-1}'), 'end']
+    for i in [2033, 2034, 2035, 2036]:
+        projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'epoch'] = 7
+        projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'subsidy'] = 3.125/2/2
+        projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'block'] = 52500 + \
+            projected_df.loc[pd.to_datetime(f'12/31/{i-1}'), 'block']
+        projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'added'] = 52500 * \
+            projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'subsidy']
+        projected_df.loc[pd.to_datetime(
+            f'12/31/{i}'), 'end'] = projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'added'] + projected_df.loc[pd.to_datetime(f'12/31/{i-1}'), 'end']
+        projected_df.loc[pd.to_datetime(
+            f'12/31/{i}'), 'starting'] = projected_df.loc[pd.to_datetime(f'12/31/{i-1}'), 'end']
+    for i in [2037, 2038, 2039, 2040]:
+        projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'epoch'] = 8
+        projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'subsidy'] = 3.125/2/2/2
+        projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'block'] = 52500 + \
+            projected_df.loc[pd.to_datetime(f'12/31/{i-1}'), 'block']
+        projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'added'] = 52500 * \
+            projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'subsidy']
+        projected_df.loc[pd.to_datetime(
+            f'12/31/{i}'), 'end'] = projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'added'] + projected_df.loc[pd.to_datetime(f'12/31/{i-1}'), 'end']
+        projected_df.loc[pd.to_datetime(
+            f'12/31/{i}'), 'starting'] = projected_df.loc[pd.to_datetime(f'12/31/{i-1}'), 'end']
+    i = '2010'
+    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 0.23
+    i = '2011'
+    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 3.06
+    i = '2012'
+    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 12.56
+    i = '2013'
+    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 946.92
+    i = '2014'
+    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 378.64
+    i = '2015'
+    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 362.73
+    i = '2016'
+    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 753.26
+    i = '2017'
+    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 10859.56
+    i = '2018'
+    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 4165.61
+    i = '2019'
+    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 7420.84
+    i = '2020'
+    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 18795.20
+    i = '2021'
+    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 57238.62
+    i = '2022'
+    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 19780
+
+    return projected_df
+
+
+st.set_page_config(layout="wide")
 file = 'btc_emission.csv'
 price_file = 'monthly_btc_price.csv'
 block_file = 'blocks_by_month.csv'
@@ -54,7 +134,9 @@ halving_dict = {1: (0, 210000, 50), 2: (210001, 420000, 25), 3: (420001, 630000,
     630001, 840000, 6.25), 5: (840001, 1050000, 3.125), 6: (1050001, 1260000, 1.5625), 7: (1260001, 1470000, .78125)}
 block_emission_df = pd.DataFrame.from_dict(halving_dict, orient='index', columns=[
     'starting_block', 'ending_block', 'btc_per_block'])
-st.set_page_config(layout="wide")
+st.write('block_emission_df')
+st.write(block_emission_df)
+
 dis_mode = st.sidebar.selectbox('Choose Stock Mode', ['Nominal', 'Adjusted for Lost Coins'])
 adj_df = pd.read_csv(adj_file)
 adj_df['date'] = adj_df['timestamp'].str[0:10]
@@ -65,6 +147,7 @@ adj_df = adj_df.rename(columns={'value': 'adj_stock'})
 adj_df = adj_df.drop(['date', 'eom'], axis=1)
 adj_df = adj_df.rename(columns={'timestamp': 'date'})
 adj_df.date = pd.to_datetime(adj_df.date)
+st.write('adj_df')
 st.write(adj_df)
 
 block_df = pd.read_csv(block_file)
@@ -93,10 +176,12 @@ price_df.reset_index(inplace=True, drop=True)
 block_price_df = pd.merge(price_df, block_df, on='date', how='left')
 block_price_df['flow'] = 12*block_price_df['month_flow']
 block_price_df['s2f'] = block_price_df['stock']/block_price_df['flow']
+st.write('block_price_df')
 st.write(block_price_df)
 
 switch_df = pd.merge(adj_df, block_price_df, on='date', how='right')
 block_price_df = switch_df.copy()
+st.write('switch_df')
 st.write(switch_df)
 c = 2.8294*(10 ** (-21))
 m = 5.0046
@@ -149,81 +234,9 @@ else:
     pass
 
 # #
-projected_df = pd.read_csv(file)
-projected_df.columns = ['date', 'block', 'epoch', 'subsidy', 'year',
-                        'starting', 'added', 'end', 'waste1', 'waste2']
-
-projected_df['year'] = pd.to_datetime(projected_df['year'])
-projected_df = projected_df.drop(['waste1', 'waste2', 'date'], axis=1)
-projected_df.set_index('year', inplace=True, drop=True)
-projected_df.loc[pd.to_datetime('12/31/2028'), 'block'] = 892500
-projected_df.loc[pd.to_datetime('12/31/2028'), 'epoch'] = 5
-projected_df.loc[pd.to_datetime('12/31/2028'), 'subsidy'] = 3.125
-projected_df.loc[pd.to_datetime('12/31/2028'),
-                 'starting'] = projected_df.loc[pd.to_datetime('12/31/27'), 'end']
-projected_df.loc[pd.to_datetime('12/31/2028'), 'added'] = 164062.5
-projected_df.loc[pd.to_datetime('12/31/2028'), 'end'] = projected_df.loc[pd.to_datetime('12/31/28'),
-                                                                         'starting'] + projected_df.loc[pd.to_datetime('12/31/2028'), 'added']
-for i in [2029, 2030, 2031, 2032]:
-    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'epoch'] = 6
-    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'subsidy'] = 3.125/2
-    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'block'] = 52500 + \
-        projected_df.loc[pd.to_datetime(f'12/31/{i-1}'), 'block']
-    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'added'] = 52500 * \
-        projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'subsidy']
-    projected_df.loc[pd.to_datetime(
-        f'12/31/{i}'), 'end'] = projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'added'] + projected_df.loc[pd.to_datetime(f'12/31/{i-1}'), 'end']
-    projected_df.loc[pd.to_datetime(
-        f'12/31/{i}'), 'starting'] = projected_df.loc[pd.to_datetime(f'12/31/{i-1}'), 'end']
-for i in [2033, 2034, 2035, 2036]:
-    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'epoch'] = 7
-    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'subsidy'] = 3.125/2/2
-    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'block'] = 52500 + \
-        projected_df.loc[pd.to_datetime(f'12/31/{i-1}'), 'block']
-    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'added'] = 52500 * \
-        projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'subsidy']
-    projected_df.loc[pd.to_datetime(
-        f'12/31/{i}'), 'end'] = projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'added'] + projected_df.loc[pd.to_datetime(f'12/31/{i-1}'), 'end']
-    projected_df.loc[pd.to_datetime(
-        f'12/31/{i}'), 'starting'] = projected_df.loc[pd.to_datetime(f'12/31/{i-1}'), 'end']
-for i in [2037, 2038, 2039, 2040]:
-    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'epoch'] = 8
-    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'subsidy'] = 3.125/2/2/2
-    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'block'] = 52500 + \
-        projected_df.loc[pd.to_datetime(f'12/31/{i-1}'), 'block']
-    projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'added'] = 52500 * \
-        projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'subsidy']
-    projected_df.loc[pd.to_datetime(
-        f'12/31/{i}'), 'end'] = projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'added'] + projected_df.loc[pd.to_datetime(f'12/31/{i-1}'), 'end']
-    projected_df.loc[pd.to_datetime(
-        f'12/31/{i}'), 'starting'] = projected_df.loc[pd.to_datetime(f'12/31/{i-1}'), 'end']
-i = '2010'
-projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 0.23
-i = '2011'
-projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 3.06
-i = '2012'
-projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 12.56
-i = '2013'
-projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 946.92
-i = '2014'
-projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 378.64
-i = '2015'
-projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 362.73
-i = '2016'
-projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 753.26
-i = '2017'
-projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 10859.56
-i = '2018'
-projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 4165.61
-i = '2019'
-projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 7420.84
-i = '2020'
-projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 18795.20
-i = '2021'
-projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 57238.62
-i = '2022'
-projected_df.loc[pd.to_datetime(f'12/31/{i}'), 'price'] = 19780
-# st.write(projected_df)
+projected_df = create_projected(file)
+st.write('projected_df')
+st.write(projected_df)
 #
 c = 2.8294*(10 ** (-21))
 m = 5.0046
@@ -255,6 +268,7 @@ projected_df['bottoms'] = projected_lows*projected_df.S2F_Price
 if dis_mode == 'Nominal':
     fig = px.line(block_price_df, x='date', y='s2fg_price', width=800, height=700,
                   title='Price = C * Stock^m/Flow^n   c= 2.8294*(10^(-21)); m = 5.0046; n = 2.0669')
+
 else:
     fig = px.line(block_price_df, x='date', y='adj_s2fg_price', width=800, height=700,
                   title='Price = C * Stock^m/Flow^n   c= 2.8294*(10^(-21)); m = 5.0046; n = 2.0669')
