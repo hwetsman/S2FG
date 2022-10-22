@@ -125,6 +125,10 @@ def create_projected(file):
     return projected_df
 
 
+# dev pathway
+# select nominal or adjusted
+# pull appropriate numbers to plot dfs
+# show plot
 st.set_page_config(layout="wide")
 file = 'btc_emission.csv'
 price_file = 'monthly_btc_price.csv'
