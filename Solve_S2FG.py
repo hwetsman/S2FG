@@ -136,13 +136,17 @@ fig.update_xaxes(title_text='Date')
 
 
 # moving average
-ma = st.sidebar.slider('Choose a value for the moving average',
-                       min_value=2, max_value=200, value=12)
+have_ma = st.sidebar.radio('Shall we show a moving average?', ['Yes', 'No'])
+if have_ma == 'Yes':
+    ma = st.sidebar.slider('Choose a value for the moving average',
+                           min_value=2, max_value=200, value=12)
 
-df['ma'] = df['price'].rolling(window=ma).mean()
-fig.add_trace(go.Line(x=df.date.values, y=df.ma, name=f'{ma} month moving average', line=dict(
-    color='white',
-    width=1)))
+    df['ma'] = df['price'].rolling(window=ma).mean()
+    fig.add_trace(go.Line(x=df.date.values, y=df.ma, name=f'{ma} month moving average', line=dict(
+        color='white',
+        width=1)))
+else:
+    pass
 st.plotly_chart(fig, use_container_width=True)
 
 # st.write(
