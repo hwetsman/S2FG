@@ -80,6 +80,8 @@ price_df.sort_values('date', inplace=True)
 price_df.reset_index(inplace=True, drop=True)
 # st.write(price_df)
 #
+
+
 block_price_df = pd.merge(price_df, block_df, on='date', how='left')
 block_price_df['flow'] = 12*block_price_df['month_flow']
 block_price_df['s2f'] = block_price_df['stock']/block_price_df['flow']
